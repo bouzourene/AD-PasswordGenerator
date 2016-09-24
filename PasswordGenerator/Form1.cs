@@ -1,11 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace PasswordGenerator
@@ -17,9 +10,11 @@ namespace PasswordGenerator
             InitializeComponent();
         }
 
+        // https://www.dotnetperls.com/random-lowercase-letter
         static class RandomLetter
         {
             static Random _random = new Random();
+
             public static char GetLetter()
             {
                 // This method returns a random lowercase letter.
@@ -32,83 +27,72 @@ namespace PasswordGenerator
 
         private void button1_Click(object sender, EventArgs e)
         {
+            // Set how many letters and numbers you want
+            int letters = 4;
+            int numbers = 4;
+
+            // Initialize variables
+            int j = 0;
             string password = "";
             string[] chars;
             chars = new string[8];
             Random r = new Random();
 
-            // Fixer la taille du mot de passe
-            int taille = 8;
-
-            // Fixer le nombre de lettres avant les chiffres
-            int letters = 4;
-
-            // Le nombre de chiffres se calcule automatiquement en fonction
-            // de la longueur du mot de passe et du nombre de lettres
-            int numbers = taille - letters;
-
-            // Incrémentation tableau "chars"
-            int j = 0;
-
-            // Génération des lettres
-            for(int i = 0; i < letters; i++)
+            // Letters generation
+            for (int i = 0; i < letters; i++)
             {
                 chars[j] = RandomLetter.GetLetter().ToString();
                 
-                // Première lettre en majuscule
+                // First letter is upper 
                 if(i == 0)
                 {
                     chars[j] = chars[j].ToUpper();
                 }
                 else
                 {
-                    // On ne veut pas deux fois la même lettre à la suite
+                    // We don't want the same chars to be next to each other
                     while (chars[j].Equals(chars[j-1].ToLower()))
                     {
-                        //Console.Write(chars[j - 1] + chars[j]);
                         chars[j] = RandomLetter.GetLetter().ToString();
-                        //Console.WriteLine(" -> " + chars[j - 1] + chars[j]);
                     }
                 }
 
                 j++;
             }
 
-            // Génération des chiffres
+            // Numbers generation
             for (int i = 0; i < numbers; i++)
             {
                 chars[j] = r.Next(0, 10).ToString();
 
                 if (j > letters)
                 {
-                    // On ne veut pas deux fois le même chiffre à la suite
+                    // We don't want the same numbers to be next to each other
                     while (chars[j].Equals(chars[j - 1]))
                     {
-                        //Console.Write(chars[j - 1] + chars[j]);
                         chars[j] = r.Next(0, 10).ToString();
-                        //Console.WriteLine(" -> " + chars[j - 1] + chars[j]);
                     }
                 }
 
                 j++;
             }
 
-            // Transformer le tableau "chars" en un string "password"
+            // Transform chars array in a single string
             for (int i = 0; i < 8; i++)
             {
                 password = password + chars[i];
             }
 
-            // Copier le mot de passe dans le presse papier
+            // Copy password in clipboard
             Clipboard.SetText(password);
 
-            // Afficher le mot de passe dans la fenêtre
+            // Show password in the textbox
             textBox1.Text = password;
         }
 
         private void PasswordGenerator_Load(object sender, EventArgs e)
         {
-            // Afficher ce texte dans le champ mot de passe
+            // Show this text when no password is generated yet
             textBox1.Text = "-------------";
         }
     }
