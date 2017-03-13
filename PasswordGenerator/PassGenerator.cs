@@ -1,31 +1,12 @@
 ﻿using System;
-using System.Windows.Forms;
 
 namespace PasswordGenerator
 {
-    public partial class PasswordGenerator : Form
+    class PassGenerator
     {
-        public PasswordGenerator()
-        {
-            InitializeComponent();
-        }
+        private String password = "";
 
-        // https://www.dotnetperls.com/random-lowercase-letter
-        static class RandomLetter
-        {
-            static Random _random = new Random();
-
-            public static char GetLetter()
-            {
-                // This method returns a random lowercase letter.
-                // ... Between 'a' and 'z' inclusize.
-                int num = _random.Next(0, 26); // Zero to 25
-                char let = (char)('a' + num);
-                return let;
-            }
-        }
-
-        private void button1_Click(object sender, EventArgs e)
+        public PassGenerator()
         {
             // Set how many letters and numbers you want
             int letters = 4;
@@ -42,16 +23,16 @@ namespace PasswordGenerator
             for (int i = 0; i < letters; i++)
             {
                 chars[j] = RandomLetter.GetLetter().ToString();
-                
+
                 // First letter is upper 
-                if(i == 0)
+                if (i == 0)
                 {
                     chars[j] = chars[j].ToUpper();
                 }
                 else
                 {
                     // We don't want the same chars to be next to each other
-                    while (chars[j].Equals(chars[j-1].ToLower()))
+                    while (chars[j].Equals(chars[j - 1].ToLower()))
                     {
                         chars[j] = RandomLetter.GetLetter().ToString();
                     }
@@ -83,29 +64,27 @@ namespace PasswordGenerator
                 password = password + chars[i];
             }
 
-            // Copy password in clipboard
-            Clipboard.SetText(password);
-
-            // Show password in the textbox
-            textBox1.Text = password;
-            
-            // Enable "Copy" button if disabled
-            if (button2.Enabled == false) button2.Enabled = true;
+            this.password = password;
         }
 
-        private void PasswordGenerator_Load(object sender, EventArgs e)
+        public String getPassword()
         {
-            // Show this text when no password is generated yet
-            textBox1.Text = "-------------";
-            
-            // Disable "Copy" button until the password is generated
-            button2.Enabled = false;
+            return this.password;
         }
-        
-		void Button2Click(object sender, EventArgs e)
-		{
-			 // Copy password in clipboard
-            Clipboard.SetText(textBox1.Text);
-		}
+
+        // https://www.dotnetperls.com/random-lowercase-letter
+        static class RandomLetter
+        {
+            static Random random = new Random();
+
+            public static char GetLetter()
+            {
+                // This method returns a random lowercase letter.
+                // ... Between 'a' and 'z' inclusize.
+                int num = random.Next(0, 26); // Zero to 25
+                char let = (char)('a' + num);
+                return let;
+            }
+        }
     }
 }
